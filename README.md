@@ -10,12 +10,18 @@
 - 自动备份原始 `config.toml` 和 `auth.json`
 - 写入 API Key 后尽量把 `auth.json` 权限收紧到当前 Windows 用户
 
-## 推荐用法：双击安装
+## 推荐用法：双击 exe
 
-解压后优先双击：
+最推荐下载单文件 exe：
 
 ```text
-启动安装器.vbs
+https://api.liusq.icu/downloads/CodexSub2APIInstaller.exe
+```
+
+下载后直接双击：
+
+```text
+CodexSub2APIInstaller.exe
 ```
 
 会打开一个简单窗口：
@@ -202,8 +208,8 @@ https://api.liusq.icu/v1
 
 ## 给测试电脑的流程
 
-1. 下载并解压工具包。
-2. 双击 `启动安装器.vbs`；如果打不开，再试 `install.bat`。
+1. 下载 `CodexSub2APIInstaller.exe` 并双击运行。
+2. 如果 exe 被系统拦截，再下载 zip，解压后双击 `启动安装器.vbs`。
 3. 粘贴 Sub2API API Key。
 4. 模型默认 `gpt-5.5`。
 5. 网络正常时代理留空。
@@ -212,15 +218,18 @@ https://api.liusq.icu/v1
 
 ## 启动失败处理
 
-有些电脑因为公司策略、杀毒软件、文件关联损坏或 Windows SmartScreen，可能无法双击 `.cmd`。
+有些电脑因为公司策略、杀毒软件、文件关联损坏或 Windows SmartScreen，可能无法直接运行 `.exe`、`.cmd` 或脚本文件。
 
 处理顺序：
 
-0. 必须先解压 zip，再运行里面的文件；不要在压缩包预览窗口里直接双击。
-1. 先用 `启动安装器.vbs`。
-2. 如果 VBS 被禁用，用 `install.bat`。
-3. 如果 BAT/CMD 都被禁用，用 `启动安装器.ps1`，右键选择“使用 PowerShell 运行”。
-4. 如果提示文件来自互联网被阻止，右键 zip 或脚本文件，打开“属性”，勾选“解除锁定”。
-5. 如果仍然不能运行，把同目录下的 `install-error.log` 发给管理员排查。
+1. 优先下载并双击 `CodexSub2APIInstaller.exe`。
+2. 如果 exe 被拦截，再下载 zip。必须先解压 zip，再运行里面的文件；不要在压缩包预览窗口里直接双击。
+3. 解压后优先双击 `启动安装器.vbs`。
+4. 如果 VBS 被禁用，用 `install.bat`。
+5. 如果 BAT/CMD 都被禁用，用 `启动安装器.ps1`，右键选择“使用 PowerShell 运行”。
+6. 如果提示文件来自互联网被阻止，右键 exe、zip 或脚本文件，打开“属性”，勾选“解除锁定”。
+7. 如果仍然不能运行，把同目录下的 `install-error.log` 发给管理员排查。
 
 新版启动器会自动尝试解除 Windows 下载文件锁定，并把启动错误写入 `install-error.log`。如果 PowerShell 或系统策略完全禁止脚本执行，这台电脑需要使用管理员账号调整策略，或换一台电脑配置。
+
+

@@ -6,9 +6,14 @@ install-error.log
 *.zip
 *.7z
 *.rar
+/dist/
+**/bin/
+**/obj/
+*.pdb
 
 # OS/editor files
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+/dist-netfx/

@@ -294,9 +294,13 @@ function Invoke-WithTemporaryProxy {
             }
 
             if ($UseSystemProxyForInstall) {
-                Write-Host "Temporarily applying WinHTTP and user proxy for Store/App Installer."
-                $oldWinHttp = (& netsh winhttp show proxy) -join "`n"
-                & netsh winhttp set proxy $ProxyUrl | Out-Null
+                Write-Host "Temporarily applying current-user proxy for Store/App Installer."
+                try {
+                    $oldWinHttp = (& netsh winhttp show proxy 2>$null) -join "`n"
+                    & netsh winhttp set proxy $ProxyUrl 2>$null | Out-Null
+                } catch {
+                    Write-Warning "WinHTTP proxy could not be changed. Continuing with current-user proxy only. Run as administrator only if Store still cannot download."
+                }
 
                 $internetSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
                 $oldUserProxy = @{
@@ -319,14 +323,18 @@ function Invoke-WithTemporaryProxy {
 
         if ($ProxyUrl -and $UseSystemProxyForInstall -and -not $KeepProxy) {
             Write-Host "Restoring previous proxy settings."
-            & netsh winhttp reset proxy | Out-Null
+            try {
+                & netsh winhttp reset proxy 2>$null | Out-Null
+            } catch {
+                Write-Warning "WinHTTP proxy restore failed. Current-user proxy will still be restored."
+            }
             $internetSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
-            if ($null -ne $oldUserProxy.ProxyEnable) {
+            if ($oldUserProxy -and $null -ne $oldUserProxy.ProxyEnable) {
                 Set-ItemProperty -Path $internetSettings -Name ProxyEnable -Type DWord -Value $oldUserProxy.ProxyEnable
             } else {
                 Set-ItemProperty -Path $internetSettings -Name ProxyEnable -Type DWord -Value 0
             }
-            if ($oldUserProxy.ProxyServer) {
+            if ($oldUserProxy -and $oldUserProxy.ProxyServer) {
                 Set-ItemProperty -Path $internetSettings -Name ProxyServer -Type String -Value $oldUserProxy.ProxyServer
             } else {
                 Remove-ItemProperty -Path $internetSettings -Name ProxyServer -ErrorAction SilentlyContinue
@@ -709,5 +717,6 @@ Set-CodexConfig
 
 Write-Step "Done"
 Write-Host "Restart Codex if it is already open, then choose/use model '$Model'."
+
 
 
