@@ -1,0 +1,14 @@
+# Runtime logs
+install-error.log
+*.log
+
+# Local archives/build output
+*.zip
+*.7z
+*.rar
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
